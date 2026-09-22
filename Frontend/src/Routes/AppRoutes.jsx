@@ -2,7 +2,7 @@ import {Routes , Route} from 'react-router-dom';
 import HomePage from "../Pages/Auth/HomePage/HomePage.jsx"
 import LoginPage from '../Pages/Auth/LoginPage/LoginPage.jsx';
 import RegisterPage from '../Pages/Auth/RegisterPage/RegisterPage.jsx'
-import UserDashboard from '../Pages/User/userDashBoard/userDashBoard.jsx';
+import UserDashboard from '../Pages/User/UserDashBoard/UserDashBoard.jsx';
 import TaskPage from '../Pages/User/TaskPage/TaskPage.jsx';
 import ProfilePage from '../Pages/ProfilePage/ProfilePage.jsx';
 import AdminPage from '../Pages/Admin/AdminPage/AdminPage.jsx';
