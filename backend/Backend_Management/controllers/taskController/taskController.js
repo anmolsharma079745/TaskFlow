@@ -2,9 +2,13 @@ const Task = require('../../models/taskModel/taskModel');
 const User = require('../../models/userModel/userModel');
 const sendEmail = require('../../config/email.js');
 
+
+// ==============================
+// CREATE TASK
+// ==============================
+
 const createTask = async (req, res) => {
     try {
-
         const {
             title,
             description,
@@ -38,13 +42,14 @@ const createTask = async (req, res) => {
 
         await task.save();
 
-        // Send task creation email
-        try {
+        // ==============================
+        // SEND TASK CREATION EMAIL
+        // ==============================
 
+        try {
             const user = await User.findById(req.user.userId);
 
             if (user && user.email) {
-
                 await sendEmail({
                     to: user.email,
                     subject: "Task Created Successfully",
@@ -118,22 +123,17 @@ const createTask = async (req, res) => {
                     "Task creation email sent successfully to:",
                     user.email
                 );
-
             } else {
-
                 console.log(
                     "Task created, but user email was not found."
                 );
-
             }
 
         } catch (emailError) {
-
             console.error(
                 "Task creation email failed:",
                 emailError
             );
-
         }
 
         return res.status(201).json({
@@ -142,8 +142,10 @@ const createTask = async (req, res) => {
         });
 
     } catch (error) {
-
-        console.log("Create Task Error:", error);
+        console.error(
+            "Create Task Error:",
+            error
+        );
 
         return res.status(500).json({
             message: "Error creating task",
@@ -153,9 +155,12 @@ const createTask = async (req, res) => {
 };
 
 
+// ==============================
+// GET MY TASKS
+// ==============================
+
 const getMyTasks = async (req, res) => {
     try {
-
         const {
             search,
             status,
@@ -168,16 +173,12 @@ const getMyTasks = async (req, res) => {
             limit = 5
         } = req.query;
 
-        console.log("page:", page, "limit:", limit);
-        console.log("sortBy:", sortBy, "order:", order);
-
         let query = {
             userId: req.user.userId
         };
 
         // Search
         if (search) {
-
             query.$or = [
                 {
                     title: {
@@ -206,22 +207,19 @@ const getMyTasks = async (req, res) => {
             ];
         }
 
-        // Status filter
+        // Filters
         if (status) {
             query.status = status;
         }
 
-        // Priority filter
         if (priority) {
             query.priority = priority;
         }
 
-        // Category filter
         if (category) {
             query.category = category;
         }
 
-        // Tags filter
         if (tags) {
             query.tags = tags;
         }
@@ -258,9 +256,11 @@ const getMyTasks = async (req, res) => {
             1
         );
 
-        const skip = (pageNumber - 1) * limitNumber;
+        const skip =
+            (pageNumber - 1) * limitNumber;
 
-        const totalTasks = await Task.countDocuments(query);
+        const totalTasks =
+            await Task.countDocuments(query);
 
         const tasks = await Task.find(query)
             .sort(sortOption)
@@ -287,8 +287,8 @@ const getMyTasks = async (req, res) => {
 
             pagination: {
                 currentPage: pageNumber,
-                totalPages: totalPages,
-                totalTasks: totalTasks,
+                totalPages,
+                totalTasks,
                 limit: limitNumber,
 
                 hasNextPage:
@@ -300,7 +300,6 @@ const getMyTasks = async (req, res) => {
         });
 
     } catch (err) {
-
         console.error(
             "Get My Tasks Error:",
             err
@@ -314,9 +313,12 @@ const getMyTasks = async (req, res) => {
 };
 
 
+// ==============================
+// GET SINGLE TASK
+// ==============================
+
 const getSingleTask = async (req, res) => {
     try {
-
         const task = await Task.findOne({
             _id: req.params.id,
             userId: req.user.userId
@@ -343,7 +345,6 @@ const getSingleTask = async (req, res) => {
         });
 
     } catch (err) {
-
         console.error(
             "Get Single Task Error:",
             err
@@ -357,9 +358,12 @@ const getSingleTask = async (req, res) => {
 };
 
 
+// ==============================
+// UPDATE TASK
+// ==============================
+
 const updateTask = async (req, res) => {
     try {
-
         const {
             title,
             description,
@@ -404,7 +408,7 @@ const updateTask = async (req, res) => {
                 dueDate
             },
             {
-                returnDocument: "after",
+                new: true,
                 runValidators: true
             }
         );
@@ -415,24 +419,23 @@ const updateTask = async (req, res) => {
             });
         }
 
-        // Send email only when task becomes Completed
+        // ==============================
+        // SEND COMPLETION EMAIL
+        // ==============================
+
         if (
             status === "Completed" &&
             oldTask.status !== "Completed"
         ) {
-
             try {
-
                 const user = await User.findById(
                     req.user.userId
                 );
 
                 if (user && user.email) {
-
                     await sendEmail({
                         to: user.email,
                         subject: "Task Completed 🎉",
-
                         html: `
                             <div style="
                                 font-family: Arial, sans-serif;
@@ -519,22 +522,17 @@ const updateTask = async (req, res) => {
                         "Task completion email sent successfully to:",
                         user.email
                     );
-
                 } else {
-
                     console.log(
                         "Task completed, but user email was not found."
                     );
-
                 }
 
             } catch (emailError) {
-
                 console.error(
                     "Task completion email failed:",
                     emailError
                 );
-
             }
         }
 
@@ -544,7 +542,6 @@ const updateTask = async (req, res) => {
         });
 
     } catch (err) {
-
         console.error(
             "Update Task Error:",
             err
@@ -558,9 +555,12 @@ const updateTask = async (req, res) => {
 };
 
 
+// ==============================
+// DELETE TASK
+// ==============================
+
 const deleteTask = async (req, res) => {
     try {
-
         const task = await Task.findOneAndDelete({
             _id: req.params.id,
             userId: req.user.userId
@@ -577,7 +577,6 @@ const deleteTask = async (req, res) => {
         });
 
     } catch (err) {
-
         console.error(
             "Delete Task Error:",
             err
@@ -591,31 +590,38 @@ const deleteTask = async (req, res) => {
 };
 
 
+// ==============================
+// DASHBOARD STATS
+// ==============================
+
 const getDashboardStats = async (req, res) => {
     try {
+        const TotalTasks =
+            await Task.countDocuments({
+                userId: req.user.userId
+            });
 
-        const TotalTasks = await Task.countDocuments({
-            userId: req.user.userId
-        });
+        const CompletedTasks =
+            await Task.countDocuments({
+                userId: req.user.userId,
+                status: "Completed"
+            });
 
-        const CompletedTasks = await Task.countDocuments({
-            userId: req.user.userId,
-            status: "Completed"
-        });
+        const PendingTasks =
+            await Task.countDocuments({
+                userId: req.user.userId,
+                status: "Pending"
+            });
 
-        const PendingTasks = await Task.countDocuments({
-            userId: req.user.userId,
-            status: "Pending"
-        });
-
-        const InProgressTasks = await Task.countDocuments({
-            userId: req.user.userId,
-            status: "In Progress"
-        });
+        const InProgressTasks =
+            await Task.countDocuments({
+                userId: req.user.userId,
+                status: "In Progress"
+            });
 
         return res.status(200).json({
-
-            message: "Dashboard stats fetched successfully",
+            message:
+                "Dashboard stats fetched successfully",
 
             stats: {
                 TotalTasks,
@@ -626,19 +632,23 @@ const getDashboardStats = async (req, res) => {
         });
 
     } catch (err) {
-
         console.error(
             "Dashboard Stats Error:",
             err
         );
 
         return res.status(500).json({
-            message: "Error fetching dashboard stats",
+            message:
+                "Error fetching dashboard stats",
             error: err.message
         });
     }
 };
 
+
+// ==============================
+// EXPORTS
+// ==============================
 
 module.exports = {
     createTask,
