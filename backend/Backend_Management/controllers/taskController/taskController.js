@@ -352,7 +352,6 @@ const getSingleTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
     try {
-
         const {
             title,
             description,
@@ -370,7 +369,7 @@ const updateTask = async (req, res) => {
             });
         }
 
-        // Get old task before updating
+        // Find existing task
         const oldTask = await Task.findOne({
             _id: req.params.id,
             userId: req.user.userId
@@ -417,19 +416,15 @@ const updateTask = async (req, res) => {
             status === "Completed" &&
             oldTask.status !== "Completed"
         ) {
-
             try {
-
                 const user = await User.findById(
                     req.user.userId
                 );
 
                 if (user && user.email) {
-
                     sendEmail({
                         to: user.email,
                         subject: "Task Completed 🎉",
-
                         html: `
                             <div style="
                                 font-family: Arial, sans-serif;
@@ -445,7 +440,7 @@ const updateTask = async (req, res) => {
                                 </h2>
 
                                 <p>
-                                    Hello ${user.name},
+                                    Hello ${user.name || "User"},
                                 </p>
 
                                 <p>
@@ -466,7 +461,7 @@ const updateTask = async (req, res) => {
 
                                     <p>
                                         <strong>Description:</strong>
-                                        ${task.description}
+                                        ${task.description || "No description"}
                                     </p>
 
                                     <p>
@@ -476,12 +471,12 @@ const updateTask = async (req, res) => {
 
                                     <p>
                                         <strong>Priority:</strong>
-                                        ${task.priority}
+                                        ${task.priority || "Not specified"}
                                     </p>
 
                                     <p>
                                         <strong>Category:</strong>
-                                        ${task.category}
+                                        ${task.category || "Not specified"}
                                     </p>
 
                                     ${
@@ -512,42 +507,28 @@ const updateTask = async (req, res) => {
                         `
                     })
                     .then(() => {
-
                         console.log(
                             "Task completion email sent successfully to:",
                             user.email
                         );
-
                     })
                     .catch((emailError) => {
-
                         console.error(
                             "Task completion email failed:",
                             emailError
                         );
-
                     });
-
-                } else {
-
-                    console.log(
-                        "Task completed, but user email was not found."
-                    );
-
                 }
-
             } catch (emailError) {
-
                 console.error(
                     "Error preparing completion email:",
                     emailError
                 );
-
             }
         }
 
         // =====================================
-        // RETURN UPDATED TASK IMMEDIATELY
+        // RETURN SUCCESS IMMEDIATELY
         // =====================================
 
         return res.status(200).json({
@@ -556,7 +537,6 @@ const updateTask = async (req, res) => {
         });
 
     } catch (err) {
-
         console.error(
             "Update Task Error:",
             err
