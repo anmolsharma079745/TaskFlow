@@ -1,6 +1,6 @@
 const Task=require('../../models/taskModel/taskModel');
 const User = require('../../models/userModel/userModel');
-const transporter = require('../../config/email.js');
+const sendEmail = require('../../config/email.js');
 
 const createTask = async (req,res)=>{
     try {
@@ -27,8 +27,7 @@ const createTask = async (req,res)=>{
         await task.save();
 
         const user = await User.findById(req.user.userId);
-        await transporter.sendMail({
-            from: `"TaskFlow" <${process.env.EMAIL_USER}>`,
+        await sendEmail({
             to: user.email,
             subject: "Task Created Successfully",
             html: `
@@ -330,8 +329,7 @@ const updateTask = async (req,res)=>{
 
             const user = await User.findById(req.user.userId);
 
-            await transporter.sendMail({
-                from: `"TaskFlow" <${process.env.EMAIL_USER}>`,
+            await sendEmail({
                 to: user.email,
                 subject: "Task Completed 🎉",
 

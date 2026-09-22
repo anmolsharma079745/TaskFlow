@@ -2,7 +2,7 @@ const User=require('../../models/userModel/userModel');
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const crypto=require("crypto");
-const transporter=require('../../config/email.js');
+const sendEmail=require('../../config/email.js');
 
 const registerUser = async (req,res)=>{
     try{
@@ -114,8 +114,7 @@ const forgotPassword = async (req,res)=>{
 
         await user.save();
 
-        await transporter.sendMail({
-            from: `"TaskFlow" <${process.env.EMAIL_USER}>`,
+        await sendEmail({
             to: user.email,
             subject: "TaskFlow Password Reset Code",
 
@@ -211,7 +210,6 @@ const resetPassword = async (req, res) => {
 
         user.password = await bcrypt.hash(password, 10);
 
-        // Clear reset code after successful password reset
         user.resetPasswordCode = undefined;
         user.resetPasswordExpires = undefined;
 

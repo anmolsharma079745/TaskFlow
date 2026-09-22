@@ -1,6 +1,6 @@
 const User= require('../../models/userModel/userModel.js');
 const Task = require('../../models/taskModel/taskModel.js');
-const transporter = require('../../config/email.js');
+const sendEmail = require('../../config/email.js');
 
 const getAllUsers = async (req , res) =>{
     try{
@@ -241,8 +241,7 @@ const updateTask = async (req,res)=>{
             const user = await User.findById(oldTask.userId);
 
             if (user) {
-                await transporter.sendMail({
-                    from: `"TaskFlow" <${process.env.EMAIL_USER}>`,
+                await sendEmail({
                     to: user.email,
                     subject: "Task Completed 🎉",
                     html: `
