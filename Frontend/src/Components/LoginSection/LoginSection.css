@@ -1,6 +1,3 @@
-/* =========================
-   Login Section
-========================= */
 
 .login-section {
     position: relative;
@@ -34,9 +31,6 @@
 }
 
 
-/* =========================
-   Background Effects
-========================= */
 
 .login-section::before {
     content: "";
@@ -107,9 +101,6 @@
 }
 
 
-/* =========================
-   Login Container
-========================= */
 
 .login-container {
     position: relative;
@@ -165,9 +156,6 @@
 }
 
 
-/* =========================
-   Login Information
-========================= */
 
 .login-info {
     position: relative;
@@ -201,7 +189,6 @@
 }
 
 
-/* Animated Shine */
 
 .login-info::before {
     content: "";
@@ -245,9 +232,6 @@
 }
 
 
-/* =========================
-   Logo
-========================= */
 
 .login-logo {
     position: relative;
@@ -316,9 +300,6 @@
 }
 
 
-/* =========================
-   Info Content
-========================= */
 
 .login-info-content {
     position: relative;
@@ -404,9 +385,6 @@
 }
 
 
-/* =========================
-   Login Card
-========================= */
 
 .login-card {
     position: relative;
@@ -426,7 +404,6 @@
 }
 
 
-/* Subtle top glow */
 
 .login-card::before {
     content: "";
@@ -450,9 +427,6 @@
 }
 
 
-/* =========================
-   Header
-========================= */
 
 .login-card-header {
     margin-bottom: 30px;
@@ -481,9 +455,6 @@
 }
 
 
-/* =========================
-   Form
-========================= */
 
 .login-form {
     width: 100%;
@@ -507,9 +478,6 @@
 }
 
 
-/* =========================
-   Input
-========================= */
 
 .input-wrapper {
     position: relative;
@@ -605,9 +573,6 @@
 }
 
 
-/* =========================
-   Password Toggle
-========================= */
 
 .password-toggle {
     position: absolute;
@@ -658,9 +623,6 @@
 }
 
 
-/* =========================
-   Login Options
-========================= */
 
 .login-options {
     margin: 2px 0 25px;
@@ -738,9 +700,6 @@
 }
 
 
-/* =========================
-   Login Button
-========================= */
 
 .login-submit {
     position: relative;
@@ -781,7 +740,6 @@
 }
 
 
-/* Button Shine */
 
 .login-submit::before {
     content: "";
@@ -840,9 +798,6 @@
 }
 
 
-/* =========================
-   Divider
-========================= */
 
 .login-divider {
     margin: 28px 0 22px;
@@ -889,9 +844,6 @@
 }
 
 
-/* =========================
-   Register Text
-========================= */
 
 .register-text {
     margin: 0;
@@ -923,9 +875,6 @@
     color: #1d4ed8;
 }
 
-/* =========================
-   AUTH MESSAGES
-========================= */
 
 .auth-message {
     display: flex;
@@ -957,9 +906,6 @@
 }
 
 
-/* =========================
-   FORGOT PASSWORD BUTTON
-========================= */
 
 .forgot-password-link {
     border: none;
@@ -978,9 +924,6 @@
 }
 
 
-/* =========================
-   RECOVERY ICON
-========================= */
 
 .recovery-icon {
     width: 54px;
@@ -1012,9 +955,6 @@
 }
 
 
-/* =========================
-   BACK BUTTON
-========================= */
 
 .back-step-button {
     width: 100%;
@@ -1047,9 +987,6 @@
 }
 
 
-/* =========================
-   BACK LOGIN BUTTON
-========================= */
 
 .back-login-button {
     border: none;
@@ -1074,18 +1011,12 @@
 }
 
 
-/* =========================
-   LOADER
-========================= */
 
 .spin {
     animation: spinLoader 0.8s linear infinite;
 }
 
 
-/* =========================
-   ANIMATIONS
-========================= */
 
 @keyframes spinLoader {
 
@@ -1128,9 +1059,6 @@
 
 }
 
-/* =========================
-   Tablet
-========================= */
 
 @media (max-width: 850px) {
 
@@ -1164,9 +1092,6 @@
 }
 
 
-/* =========================
-   Mobile
-========================= */
 
 @media (max-width: 600px) {
 
@@ -1214,9 +1139,6 @@
 }
 
 
-/* =========================
-   Small Mobile
-========================= */
 
 @media (max-width: 400px) {
 

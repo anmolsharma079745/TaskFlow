@@ -32,9 +32,6 @@
 }
 
 
-/* =========================
-   PROFILE HEADING
-========================= */
 
 .profile-heading {
     margin-bottom: 40px;
@@ -80,9 +77,6 @@
 }
 
 
-/* =========================
-   CONTENT
-========================= */
 
 .profile-content {
     display: grid;
@@ -92,9 +86,6 @@
 }
 
 
-/* =========================
-   COMMON CARD
-========================= */
 
 .profile-card {
     position: relative;
@@ -136,9 +127,6 @@
 }
 
 
-/* =========================
-   MAIN PROFILE CARD
-========================= */
 
 .profile-main-card {
     padding: 34px;
@@ -203,9 +191,6 @@
 }
 
 
-/* =========================
-   DIVIDER
-========================= */
 
 .profile-divider {
     width: 100%;
@@ -215,9 +200,6 @@
 }
 
 
-/* =========================
-   DETAILS
-========================= */
 
 .profile-details {
     display: grid;
@@ -278,9 +260,6 @@
 }
 
 
-/* =========================
-   SETTINGS CARD
-========================= */
 
 .profile-actions-card {
     padding: 30px;
@@ -322,9 +301,6 @@
 }
 
 
-/* =========================
-   ACTION BUTTONS
-========================= */
 
 .profile-actions {
     display: flex;
@@ -410,9 +386,6 @@
 }
 
 
-/* =========================
-   EMPTY STATE
-========================= */
 
 .profile-empty {
     min-height: 400px;
@@ -452,9 +425,6 @@
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media (max-width: 850px) {
 
@@ -510,9 +480,6 @@
     }
 
 }
-/* =========================================
-PROFILE MODALS
-========================================= */
 
 .profile-modal-overlay {
 position: fixed;
@@ -661,9 +628,6 @@ line-height: 1.5;
 
 }
 
-/* =========================================
-PROFILE FORM
-========================================= */
 
 .profile-form {
 display: flex;
@@ -730,9 +694,6 @@ font-size: 11px;
 
 }
 
-/* =========================================
-MODAL BUTTONS
-========================================= */
 
 .profile-modal-actions {
 display: flex;
@@ -780,9 +741,6 @@ background: #ffffff;
 color: #2563eb;
 
 }
-/* =========================================
-   PASSWORD INPUT
-========================================= */
 
 .profile-input-wrapper {
     position: relative;
@@ -924,9 +882,6 @@ transition: transform 0.3s ease;
 transform: translateX(2px);
 }
 
-/* =========================================
-ANIMATIONS
-========================================= */
 
 @keyframes profileModalOverlay {
 from {
@@ -952,9 +907,6 @@ to {
 
 }
 
-/* =========================================
-RESPONSIVE
-========================================= */
 
 @media (max-width: 600px) {
 

@@ -43,7 +43,6 @@ const Header = () => {
 
                 <div className="header-container">
 
-                    {/* Logo */}
                     <div className="header-logo">
 
                         <Link to="/" className="header-logo-link">
@@ -59,7 +58,6 @@ const Header = () => {
                     </div>
 
 
-                    {/* Navbar */}
                     <div className="navbar">
 
                         <button
@@ -100,7 +98,6 @@ const Header = () => {
                     </div>
 
 
-                    {/* Actions */}
                     <div className="header-actions">
 
                         <button
@@ -137,7 +134,6 @@ const Header = () => {
             </header>
 
 
-            {/* Logout Popup */}
             {showLogoutPopup && (
                 <div className="logout-overlay">
 

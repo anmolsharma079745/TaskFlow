@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginSection.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const LoginSection = () => {
 
     const navigate = useNavigate();
 
-    // Login states
     const [showPassword, setShowPassword] = useState(false);
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
 
-    // Forgot password states
     const [forgotMode, setForgotMode] = useState(false);
     const [resetStep, setResetStep] = useState(1);
 
@@ -23,18 +22,12 @@ const LoginSection = () => {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    // Common states
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    const API_BASE_URL =
-        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+    
 
-
-    // =========================
-    // LOGIN
-    // =========================
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -73,12 +66,10 @@ const LoginSection = () => {
                 );
             }
 
-            // Save token if backend returns one
             if (data.token) {
                 localStorage.setItem("token", data.token);
             }
 
-            // Save user if backend returns user
             if (data.user) {
                 localStorage.setItem(
                     "user",
@@ -108,10 +99,6 @@ const LoginSection = () => {
     };
 
 
-    // =========================
-    // FORGOT PASSWORD
-    // STEP 1
-    // =========================
 
     const handleSendCode = async (e) => {
         e.preventDefault();
@@ -167,9 +154,6 @@ const LoginSection = () => {
     };
 
 
-    // =========================
-    // STEP 2 - VERIFY CODE
-    // =========================
 
     const handleVerifyCode = async (e) => {
         e.preventDefault();
@@ -229,9 +213,6 @@ const LoginSection = () => {
     };
 
 
-    // =========================
-    // STEP 3 - RESET PASSWORD
-    // =========================
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
@@ -301,9 +282,6 @@ const LoginSection = () => {
     };
 
 
-    // =========================
-    // OPEN FORGOT PASSWORD
-    // =========================
 
     const handleForgotPassword = () => {
 
@@ -321,9 +299,6 @@ const LoginSection = () => {
     };
 
 
-    // =========================
-    // BACK TO LOGIN
-    // =========================
 
     const handleBackToLogin = () => {
 
@@ -345,9 +320,6 @@ const LoginSection = () => {
 
             <div className="login-container">
 
-                {/* =========================
-                    LEFT SIDE
-                ========================== */}
 
                 <div className="login-info">
 
@@ -407,15 +379,9 @@ const LoginSection = () => {
                 </div>
 
 
-                {/* =========================
-                    RIGHT SIDE
-                ========================== */}
 
                 <div className="login-card">
 
-                    {/* =========================
-                        ERROR MESSAGE
-                    ========================== */}
 
                     {error && (
 
@@ -430,9 +396,6 @@ const LoginSection = () => {
                     )}
 
 
-                    {/* =========================
-                        SUCCESS MESSAGE
-                    ========================== */}
 
                     {success && (
 
@@ -447,9 +410,6 @@ const LoginSection = () => {
                     )}
 
 
-                    {/* ==================================================
-                        NORMAL LOGIN
-                    =================================================== */}
 
                     {!forgotMode && (
 
@@ -471,7 +431,6 @@ const LoginSection = () => {
                                 onSubmit={handleLogin}
                             >
 
-                                {/* EMAIL */}
 
                                 <div className="form-group">
 
@@ -501,7 +460,6 @@ const LoginSection = () => {
                                 </div>
 
 
-                                {/* PASSWORD */}
 
                                 <div className="form-group">
 
@@ -560,7 +518,6 @@ const LoginSection = () => {
                                 </div>
 
 
-                                {/* OPTIONS */}
 
                                 <div className="login-options">
 
@@ -591,7 +548,6 @@ const LoginSection = () => {
                                 </div>
 
 
-                                {/* LOGIN BUTTON */}
 
                                 <button
                                     type="submit"
@@ -740,7 +696,6 @@ const LoginSection = () => {
                             )}
 
 
-                            {/* STEP 2 */}
 
                             {resetStep === 2 && (
 
@@ -849,7 +804,6 @@ const LoginSection = () => {
                             )}
 
 
-                            {/* STEP 3 */}
 
                             {resetStep === 3 && (
 
@@ -878,7 +832,6 @@ const LoginSection = () => {
                                         onSubmit={handleResetPassword}
                                     >
 
-                                        {/* NEW PASSWORD */}
 
                                         <div className="form-group">
 
@@ -936,7 +889,6 @@ const LoginSection = () => {
                                         </div>
 
 
-                                        {/* CONFIRM PASSWORD */}
 
                                         <div className="form-group">
 

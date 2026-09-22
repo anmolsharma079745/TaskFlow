@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminManageUserSection.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminUsers = () => {
 
@@ -19,9 +20,6 @@ const AdminUsers = () => {
     });
 
 
-    /* ================================
-       FETCH ALL USERS
-    ================================= */
 
     const fetchUsers = async () => {
 
@@ -33,7 +31,7 @@ const AdminUsers = () => {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:3000/api/admin/getAllUsers",
+                `${API_BASE_URL}/api/admin/getAllUsers`,
                 {
                     method: "GET",
                     headers: {
@@ -74,9 +72,6 @@ const AdminUsers = () => {
     }, []);
 
 
-    /* ================================
-       EDIT USER
-    ================================= */
 
     const handleEditClick = (user) => {
 
@@ -103,9 +98,6 @@ const AdminUsers = () => {
     };
 
 
-    /* ================================
-       UPDATE USER
-    ================================= */
 
     const handleUpdateUser = async (e) => {
 
@@ -116,7 +108,7 @@ const AdminUsers = () => {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:3000/api/admin/updateUser/${selectedUser._id}`,
+                `${API_BASE_URL}/api/admin/updateUser/${selectedUser._id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -158,9 +150,6 @@ const AdminUsers = () => {
     };
 
 
-    /* ================================
-       DELETE USER
-    ================================= */
 
     const handleDeleteUser = async (userId) => {
 
@@ -177,7 +166,7 @@ const AdminUsers = () => {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:3000/api/admin/deleteUser/${userId}`,
+                `${API_BASE_URL}/api/admin/deleteUser/${userId}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -213,9 +202,6 @@ const AdminUsers = () => {
     };
 
 
-    /* ================================
-       SEARCH USERS
-    ================================= */
 
     const filteredUsers = users.filter(user => {
 
@@ -237,9 +223,6 @@ const AdminUsers = () => {
             <div className="admin-users-container">
 
 
-                {/* ================================
-                    HEADER
-                ================================= */}
 
                 <div className="admin-users-header">
 
@@ -269,7 +252,6 @@ const AdminUsers = () => {
                     </div>
 
 
-                    {/* USER COUNT */}
 
                     <div className="admin-user-count">
 
@@ -292,9 +274,6 @@ const AdminUsers = () => {
                 </div>
 
 
-                {/* ================================
-                    ERROR
-                ================================= */}
 
                 {error && (
 
@@ -317,9 +296,6 @@ const AdminUsers = () => {
                 )}
 
 
-                {/* ================================
-                    SEARCH
-                ================================= */}
 
                 <div className="admin-users-toolbar">
 
@@ -354,14 +330,10 @@ const AdminUsers = () => {
                 </div>
 
 
-                {/* ================================
-                    USERS TABLE
-                ================================= */}
 
                 <div className="admin-users-card">
 
 
-                    {/* LOADING */}
 
                     {loading ? (
 
@@ -378,7 +350,6 @@ const AdminUsers = () => {
 
                     ) : filteredUsers.length === 0 ? (
 
-                        /* EMPTY */
 
                         <div className="admin-users-empty">
 
@@ -405,7 +376,6 @@ const AdminUsers = () => {
 
                     ) : (
 
-                        /* TABLE */
 
                         <div className="admin-table-wrapper">
 
@@ -443,7 +413,6 @@ const AdminUsers = () => {
                                         <tr key={user._id}>
 
 
-                                            {/* USER */}
 
                                             <td>
 
@@ -476,7 +445,6 @@ const AdminUsers = () => {
                                             </td>
 
 
-                                            {/* EMAIL */}
 
                                             <td>
 
@@ -487,7 +455,6 @@ const AdminUsers = () => {
                                             </td>
 
 
-                                            {/* ROLE */}
 
                                             <td>
 
@@ -508,14 +475,12 @@ const AdminUsers = () => {
                                             </td>
 
 
-                                            {/* ACTIONS */}
 
                                             <td>
 
                                                 <div className="user-actions">
 
 
-                                                    {/* EDIT */}
 
                                                     <button
                                                         className="user-action-btn edit-btn"
@@ -532,7 +497,6 @@ const AdminUsers = () => {
                                                     </button>
 
 
-                                                    {/* DELETE */}
 
                                                     <button
                                                         className="user-action-btn delete-btn"
@@ -569,9 +533,6 @@ const AdminUsers = () => {
             </div>
 
 
-            {/* ================================
-                EDIT USER MODAL
-            ================================= */}
 
             {showEditModal && selectedUser && (
 
@@ -580,7 +541,6 @@ const AdminUsers = () => {
                     <div className="admin-edit-modal">
 
 
-                        {/* MODAL HEADER */}
 
                         <div className="admin-modal-header">
 
@@ -614,14 +574,12 @@ const AdminUsers = () => {
                         </div>
 
 
-                        {/* FORM */}
 
                         <form
                             onSubmit={handleUpdateUser}
                         >
 
 
-                            {/* NAME */}
 
                             <div className="admin-form-group">
 
@@ -646,7 +604,6 @@ const AdminUsers = () => {
                             </div>
 
 
-                            {/* EMAIL */}
 
                             <div className="admin-form-group">
 
@@ -671,7 +628,6 @@ const AdminUsers = () => {
                             </div>
 
 
-                            {/* ROLE */}
 
                             <div className="admin-form-group">
 
@@ -704,7 +660,6 @@ const AdminUsers = () => {
                             </div>
 
 
-                            {/* MODAL ACTIONS */}
 
                             <div className="admin-modal-actions">
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./TaskSection.css";
 
 const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+    import.meta.env.VITE_API_BASE_URL ;
 
 const TaskSection = () => {
     const [tasks, setTasks] = useState([]);
@@ -25,9 +25,6 @@ const TaskSection = () => {
         return localStorage.getItem("token");
     };
 
-    // =========================
-    // Fetch All Tasks
-    // =========================
 
     const fetchTasks = async () => {
         setLoading(true);
@@ -80,9 +77,6 @@ const TaskSection = () => {
         fetchTasks();
     }, []);
 
-    // =========================
-    // Handle Input
-    // =========================
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -93,9 +87,6 @@ const TaskSection = () => {
         }));
     };
 
-    // =========================
-    // Create / Update Task
-    // =========================
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -153,9 +144,6 @@ const TaskSection = () => {
         }
     };
 
-    // =========================
-    // Edit Task
-    // =========================
 
     const handleEdit = (task) => {
         setEditingTask(task);
@@ -178,9 +166,6 @@ const TaskSection = () => {
         });
     };
 
-    // =========================
-    // Delete Task
-    // =========================
 
     const handleDelete = async (taskId) => {
         const confirmDelete = window.confirm(
@@ -232,9 +217,6 @@ const TaskSection = () => {
         }
     };
 
-    // =========================
-    // Reset Form
-    // =========================
 
     const resetForm = () => {
         setFormData({
@@ -249,9 +231,6 @@ const TaskSection = () => {
         setShowForm(false);
     };
 
-    // =========================
-    // Status Class
-    // =========================
 
     const getStatusClass = (status) => {
         if (status === "Completed") {
@@ -265,9 +244,6 @@ const TaskSection = () => {
         return "status-pending";
     };
 
-    // =========================
-    // Priority Class
-    // =========================
 
     const getPriorityClass = (priority) => {
         if (priority === "High") {
@@ -285,9 +261,6 @@ const TaskSection = () => {
         <main className="task-section">
             <div className="task-container">
 
-                {/* =========================
-                    Header
-                ========================= */}
 
                 <section className="task-page-header">
                     <div>
@@ -323,9 +296,6 @@ const TaskSection = () => {
                     </button>
                 </section>
 
-                {/* =========================
-                    Messages
-                ========================= */}
 
                 {error && (
                     <div className="task-message error-message">
@@ -341,9 +311,6 @@ const TaskSection = () => {
                     </div>
                 )}
 
-                {/* =========================
-                    Task Form
-                ========================= */}
 
                 {showForm && (
                     <section className="task-form-card">
@@ -501,9 +468,6 @@ const TaskSection = () => {
                     </section>
                 )}
 
-                {/* =========================
-                    Tasks Section
-                ========================= */}
 
                 <section className="tasks-section">
 

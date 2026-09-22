@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./UserDashBoard.css";
 
 const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+    import.meta.env.VITE_API_BASE_URL ;
 
 const UserDashboardSection = () => {
 
@@ -113,7 +113,6 @@ const UserDashboardSection = () => {
 
             <div className="dashboard-container">
 
-                {/* Welcome Section */}
                 <section className="dashboard-welcome">
 
                     <div className="welcome-content">
@@ -146,7 +145,6 @@ const UserDashboardSection = () => {
                 </section>
 
 
-                {/* Error */}
                 {error && (
                     <div className="dashboard-message error-message">
                         <i className="ri-error-warning-line"></i>
@@ -155,7 +153,6 @@ const UserDashboardSection = () => {
                 )}
 
 
-                {/* Statistics */}
                 <section className="dashboard-stats">
 
                     <div className="stat-card">
@@ -236,7 +233,6 @@ const UserDashboardSection = () => {
                 </section>
 
 
-                {/* Recent Tasks */}
                 <section className="recent-tasks-section">
 
                     <div className="section-header">
@@ -375,7 +371,6 @@ const UserDashboardSection = () => {
                 </section>
 
 
-                {/* Quick Actions */}
                 <section className="quick-actions-section">
 
                     <div className="section-header">

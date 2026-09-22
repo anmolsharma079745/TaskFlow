@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminTasks.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminTasks = () => {
 
@@ -25,9 +26,6 @@ const AdminTasks = () => {
         dueDate: ""
     });
 
-    // =========================
-    // FETCH ALL TASKS
-    // =========================
     const fetchTasks = async () => {
 
         try {
@@ -38,7 +36,7 @@ const AdminTasks = () => {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:3000/api/admin/getAllTasks",
+                `${API_BASE_URL}/api/admin/getAllTasks"`,
                 {
                     method: "GET",
                     headers: {
@@ -77,9 +75,6 @@ const AdminTasks = () => {
         fetchTasks();
     }, []);
 
-    // =========================
-    // EDIT TASK
-    // =========================
     const handleEditClick = (task) => {
 
         setSelectedTask(task);
@@ -103,9 +98,6 @@ const AdminTasks = () => {
         setShowEditModal(true);
     };
 
-    // =========================
-    // HANDLE FORM CHANGE
-    // =========================
     const handleEditChange = (e) => {
 
         const { name, value } = e.target;
@@ -116,9 +108,6 @@ const AdminTasks = () => {
         }));
     };
 
-    // =========================
-    // UPDATE TASK
-    // =========================
     const handleUpdateTask = async (e) => {
 
         e.preventDefault();
@@ -136,7 +125,7 @@ const AdminTasks = () => {
             };
 
             const response = await fetch(
-                `http://localhost:3000/api/admin/updateTask/${selectedTask._id}`,
+                `${API_BASE_URL}/api/admin/updateTask/${selectedTask._id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -176,9 +165,6 @@ const AdminTasks = () => {
         }
     };
 
-    // =========================
-    // DELETE TASK
-    // =========================
     const handleDeleteTask = async (taskId) => {
 
         const confirmDelete = window.confirm(
@@ -194,7 +180,7 @@ const AdminTasks = () => {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:3000/api/admin/deleteTask/${taskId}`,
+                `${API_BASE_URL}/api/admin/deleteTask/${taskId}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -228,9 +214,6 @@ const AdminTasks = () => {
         }
     };
 
-    // =========================
-    // FILTER TASKS
-    // =========================
     const filteredTasks = tasks.filter(task => {
 
         const searchValue = search.toLowerCase();
@@ -257,9 +240,6 @@ const AdminTasks = () => {
         );
     });
 
-    // =========================
-    // STATUS CLASS
-    // =========================
     const getStatusClass = (status) => {
 
         if (status === "Completed") {
@@ -273,9 +253,6 @@ const AdminTasks = () => {
         return "pending-status";
     };
 
-    // =========================
-    // PRIORITY CLASS
-    // =========================
     const getPriorityClass = (priority) => {
 
         if (priority === "High") {
@@ -298,7 +275,6 @@ const AdminTasks = () => {
 
             <div className="admin-tasks-container">
 
-                {/* ================= HEADER ================= */}
 
                 <div className="admin-tasks-header">
 
@@ -346,7 +322,6 @@ const AdminTasks = () => {
 
                 </div>
 
-                {/* ================= ERROR ================= */}
 
                 {error && (
 
@@ -366,11 +341,9 @@ const AdminTasks = () => {
 
                 )}
 
-                {/* ================= TOOLBAR ================= */}
 
                 <div className="admin-tasks-toolbar">
 
-                    {/* SEARCH */}
 
                     <div className="admin-task-search">
 
@@ -398,7 +371,6 @@ const AdminTasks = () => {
 
                     </div>
 
-                    {/* STATUS FILTER */}
 
                     <div className="admin-filter-box">
 
@@ -431,7 +403,6 @@ const AdminTasks = () => {
 
                     </div>
 
-                    {/* PRIORITY FILTER */}
 
                     <div className="admin-filter-box">
 
@@ -466,7 +437,6 @@ const AdminTasks = () => {
 
                 </div>
 
-                {/* ================= TASK CARD ================= */}
 
                 <div className="admin-tasks-card">
 
@@ -554,7 +524,6 @@ const AdminTasks = () => {
 
                                         <tr key={task._id}>
 
-                                            {/* TASK */}
 
                                             <td>
 
@@ -583,7 +552,6 @@ const AdminTasks = () => {
 
                                             </td>
 
-                                            {/* USER */}
 
                                             <td>
 
@@ -603,7 +571,6 @@ const AdminTasks = () => {
 
                                             </td>
 
-                                            {/* STATUS */}
 
                                             <td>
 
@@ -617,7 +584,6 @@ const AdminTasks = () => {
 
                                             </td>
 
-                                            {/* PRIORITY */}
 
                                             <td>
 
@@ -632,7 +598,6 @@ const AdminTasks = () => {
 
                                             </td>
 
-                                            {/* DUE DATE */}
 
                                             <td>
 
@@ -648,7 +613,6 @@ const AdminTasks = () => {
 
                                             </td>
 
-                                            {/* ACTIONS */}
 
                                             <td>
 
@@ -698,7 +662,6 @@ const AdminTasks = () => {
 
             </div>
 
-            {/* ================= EDIT MODAL ================= */}
 
             {showEditModal && selectedTask && (
 
@@ -734,7 +697,6 @@ const AdminTasks = () => {
 
                         <form onSubmit={handleUpdateTask}>
 
-                            {/* TITLE */}
 
                             <div className="admin-form-group">
 
@@ -758,7 +720,6 @@ const AdminTasks = () => {
 
                             </div>
 
-                            {/* DESCRIPTION */}
 
                             <div className="admin-form-group">
 
@@ -781,7 +742,6 @@ const AdminTasks = () => {
 
                             </div>
 
-                            {/* STATUS */}
 
                             <div className="admin-form-row">
 
@@ -819,7 +779,6 @@ const AdminTasks = () => {
 
                                 </div>
 
-                                {/* PRIORITY */}
 
                                 <div className="admin-form-group">
 
@@ -861,7 +820,6 @@ const AdminTasks = () => {
 
                             </div>
 
-                            {/* CATEGORY */}
 
                             <div className="admin-form-group">
 
@@ -885,7 +843,6 @@ const AdminTasks = () => {
 
                             </div>
 
-                            {/* TAGS */}
 
                             <div className="admin-form-group">
 
@@ -909,7 +866,6 @@ const AdminTasks = () => {
 
                             </div>
 
-                            {/* DUE DATE */}
 
                             <div className="admin-form-group">
 
@@ -932,7 +888,6 @@ const AdminTasks = () => {
 
                             </div>
 
-                            {/* BUTTONS */}
 
                             <div className="admin-modal-actions">
 

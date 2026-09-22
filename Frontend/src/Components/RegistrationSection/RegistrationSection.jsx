@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./RegistrationSection.css";
 
 const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+    import.meta.env.VITE_API_BASE_URL ;
 
 const RegistrationSection = () => {
 
@@ -16,6 +16,7 @@ const RegistrationSection = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -27,13 +28,11 @@ const RegistrationSection = () => {
         setError("");
         setSuccess("");
 
-        // Password match validation
         if (password !== confirmPassword) {
             setError("Passwords do not match.");
             return;
         }
 
-        // Minimum password validation
         if (password.length < 6) {
             setError("Password must be at least 6 characters.");
             return;
@@ -69,13 +68,11 @@ const RegistrationSection = () => {
                 data.message || "Account created successfully!"
             );
 
-            // Clear form
             setName("");
             setEmail("");
             setPassword("");
             setConfirmPassword("");
 
-            // Redirect to login after successful registration
             setTimeout(() => {
                 navigate("/login");
             }, 1500);
@@ -139,7 +136,6 @@ const RegistrationSection = () => {
 
                     </div>
 
-                    {/* Error Message */}
                     {error && (
                         <div className="auth-message error-message">
                             <i className="ri-error-warning-line"></i>
@@ -147,7 +143,6 @@ const RegistrationSection = () => {
                         </div>
                     )}
 
-                    {/* Success Message */}
                     {success && (
                         <div className="auth-message success-message">
                             <i className="ri-checkbox-circle-line"></i>

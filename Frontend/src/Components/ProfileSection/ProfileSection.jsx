@@ -59,7 +59,6 @@ const handleChangePassword = (e) => {
         return;
     }
 
-    // Backend API will be connected here later.
 
     setCurrentPassword("");
     setNewPassword("");
@@ -89,7 +88,6 @@ return (
 
         <div className="profile-container">
 
-            {/* PAGE HEADER */}
 
             <div className="profile-heading">
 
@@ -112,11 +110,9 @@ return (
             </div>
 
 
-            {/* PROFILE CONTENT */}
 
             <div className="profile-content">
 
-                {/* PROFILE CARD */}
 
                 <div className="profile-card profile-main-card">
 
@@ -148,7 +144,6 @@ return (
                     <div className="profile-divider"></div>
 
 
-                    {/* ACCOUNT INFORMATION */}
 
                     <div className="profile-details">
 
@@ -222,7 +217,6 @@ return (
                 </div>
 
 
-                {/* ACCOUNT ACTIONS */}
 
                 <div className="profile-card profile-actions-card">
 
@@ -279,7 +273,6 @@ return (
         </div>
 
 
-        {/* EDIT PROFILE MODAL */}
 
         {showEditProfile && (
 
@@ -407,7 +400,6 @@ return (
         )}
 
 
-        {/* CHANGE PASSWORD MODAL */}
 
         {showChangePassword && (
 

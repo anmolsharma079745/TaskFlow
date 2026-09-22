@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminSection.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminSection = () => {
     const [stats, setStats] = useState({
@@ -30,7 +31,7 @@ const AdminSection = () => {
             }
 
             const response = await fetch(
-                "http://localhost:3000/api/admin/getDashboardStats",
+                `${API_BASE_URL}/api/admin/getDashboardStats`,
                 {
                     method: "GET",
                     headers: {
@@ -78,7 +79,7 @@ const AdminSection = () => {
             }
 
             const response = await fetch(
-                "http://localhost:3000/api/admin/getAllTasks?sortBy=createdAt&order=desc&page=1&limit=5",
+                `${API_BASE_URL}/api/admin/getAllTasks?sortBy=createdAt&order=desc&page=1&limit=5`,
                 {
                     method: "GET",
                     headers: {
