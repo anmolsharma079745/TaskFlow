@@ -7,7 +7,7 @@ import TaskPage from '../Pages/User/TaskPage/TaskPage.jsx';
 import ProfilePage from '../Pages/ProfilePage/ProfilePage.jsx';
 import AdminPage from '../Pages/Admin/AdminPage/AdminPage.jsx';
 import AdminManageUser from "../Pages/Admin/AdminManageUser/AdminManageUser.jsx"
-import AdminTasksPage from '../Pages/Admin/AdminTasksPage/AdminTasksPAge.jsx';
+import AdminTasksPage from '../Pages/Admin/AdminTasksPage/AdminTasksPage.jsx';
 
 const AppRoutes = ()=> {
     return (
