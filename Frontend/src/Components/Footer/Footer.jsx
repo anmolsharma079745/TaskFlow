@@ -11,7 +11,9 @@ const Footer = () => {
 
                     <Link to="/" className="footer-logo">
                         <div className="footer-logo-icon">
-                            <i className="ri-check-double-line"></i>
+                            <div className="footer-logo-icon">
+    <img src="/Task%20Flow%20symbol.png" alt="TaskFlow Logo" />
+</div>
                         </div>
 
                         <span>TaskFlow</span>

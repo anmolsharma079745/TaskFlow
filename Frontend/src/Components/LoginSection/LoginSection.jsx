@@ -326,7 +326,7 @@ const LoginSection = () => {
                     <Link to="/" className="login-logo">
 
                         <div className="login-logo-icon">
-                            <i className="ri-check-double-line"></i>
+                            <img src="/Task%20Flow%20symbol.png" alt="TaskFlow Logo" />
                         </div>
 
                         <span>TaskFlow</span>

@@ -36,7 +36,7 @@ const AdminTasks = () => {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                `${API_BASE_URL}/api/admin/getAllTasks"`,
+                `${API_BASE_URL}/api/admin/getAllTasks`,
                 {
                     method: "GET",
                     headers: {

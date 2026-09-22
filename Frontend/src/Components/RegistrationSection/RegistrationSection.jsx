@@ -96,7 +96,7 @@ const RegistrationSection = () => {
                     <Link to="/" className="registration-logo">
 
                         <div className="registration-logo-icon">
-                            <i className="ri-check-double-line"></i>
+                                <img src="/Task%20Flow%20symbol.png" alt="TaskFlow Logo" />
                         </div>
 
                         <span>TaskFlow</span>

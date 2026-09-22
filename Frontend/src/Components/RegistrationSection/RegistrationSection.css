@@ -299,12 +299,13 @@
     background: rgba(255, 255, 255, 0.18);
 }
 
-
-.registration-logo-icon i {
-    font-size: 21px;
+.registration-logo-icon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 11px;
 }
-
-
 
 .registration-info-content {
     position: relative;

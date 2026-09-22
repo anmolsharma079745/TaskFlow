@@ -1,20 +1,31 @@
-const Task=require('../../models/taskModel/taskModel');
+const Task = require('../../models/taskModel/taskModel');
 const User = require('../../models/userModel/userModel');
 const sendEmail = require('../../config/email.js');
 
-const createTask = async (req,res)=>{
+const createTask = async (req, res) => {
     try {
-        const {title , description, priority, category, tags, dueDate} = req.body;
-        if( !title || !description){
+
+        const {
+            title,
+            description,
+            priority,
+            category,
+            tags,
+            dueDate
+        } = req.body;
+
+        if (!title || !description) {
             return res.status(400).json({
-                message : "Title and description are required"
-            })
+                message: "Title and description are required"
+            });
         }
-        if(dueDate && new Date(dueDate) <= new Date()){
+
+        if (dueDate && new Date(dueDate) <= new Date()) {
             return res.status(400).json({
                 message: "Due date and time must be in the future"
             });
         }
+
         const task = new Task({
             title,
             description,
@@ -23,88 +34,124 @@ const createTask = async (req,res)=>{
             tags,
             dueDate,
             userId: req.user.userId
-        })
+        });
+
         await task.save();
 
-        const user = await User.findById(req.user.userId);
-        await sendEmail({
-            to: user.email,
-            subject: "Task Created Successfully",
-            html: `
-                <div style="
-                    font-family: Arial, sans-serif;
-                    max-width: 600px;
-                    margin: auto;
-                    padding: 30px;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 10px;
-                ">
+        // Send task creation email
+        try {
 
-                    <h2 style="color: #2563eb;">
-                        Task Created Successfully
-                    </h2>
+            const user = await User.findById(req.user.userId);
 
-                    <p>Hello ${user.name},</p>
+            if (user && user.email) {
 
-                    <p>
-                        Your task has been created successfully in TaskFlow.
-                    </p>
+                await sendEmail({
+                    to: user.email,
+                    subject: "Task Created Successfully",
+                    html: `
+                        <div style="
+                            font-family: Arial, sans-serif;
+                            max-width: 600px;
+                            margin: auto;
+                            padding: 30px;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 10px;
+                        ">
 
-                    <div style="
-                        background: #f8fafc;
-                        padding: 20px;
-                        border-radius: 8px;
-                        margin: 20px 0;
-                    ">
+                            <h2 style="color: #2563eb;">
+                                Task Created Successfully
+                            </h2>
 
-                        <h3>${task.title}</h3>
+                            <p>Hello ${user.name},</p>
 
-                        <p>
-                            <strong>Description:</strong>
-                            ${task.description}
-                        </p>
+                            <p>
+                                Your task has been created successfully in TaskFlow.
+                            </p>
 
-                        <p>
-                            <strong>Priority:</strong>
-                            ${task.priority}
-                        </p>
+                            <div style="
+                                background: #f8fafc;
+                                padding: 20px;
+                                border-radius: 8px;
+                                margin: 20px 0;
+                            ">
 
-                        <p>
-                            <strong>Status:</strong>
-                            ${task.status}
-                        </p>
+                                <h3>${task.title}</h3>
 
-                        ${
-                            task.dueDate
-                                ? `<p>
-                                    <strong>Due Date:</strong>
-                                    ${new Date(task.dueDate).toLocaleDateString()}
-                                   </p>`
-                                : ""
-                        }
+                                <p>
+                                    <strong>Description:</strong>
+                                    ${task.description}
+                                </p>
 
-                    </div>
+                                <p>
+                                    <strong>Priority:</strong>
+                                    ${task.priority}
+                                </p>
 
-                    <p>
-                        Regards,<br>
-                        <strong>TaskFlow Team</strong>
-                    </p>
+                                <p>
+                                    <strong>Status:</strong>
+                                    ${task.status}
+                                </p>
 
-                </div>
-            `
-        });
-        res.status(201).json({
-            message : "Task created successfully",
+                                ${
+                                    task.dueDate
+                                        ? `
+                                            <p>
+                                                <strong>Due Date:</strong>
+                                                ${new Date(task.dueDate).toLocaleDateString()}
+                                            </p>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <p>
+                                Regards,<br>
+                                <strong>TaskFlow Team</strong>
+                            </p>
+
+                        </div>
+                    `
+                });
+
+                console.log(
+                    "Task creation email sent successfully to:",
+                    user.email
+                );
+
+            } else {
+
+                console.log(
+                    "Task created, but user email was not found."
+                );
+
+            }
+
+        } catch (emailError) {
+
+            console.error(
+                "Task creation email failed:",
+                emailError
+            );
+
+        }
+
+        return res.status(201).json({
+            message: "Task created successfully",
             task
-        })
+        });
+
     } catch (error) {
-        console.log("Task Email Error:", error);
+
+        console.log("Create Task Error:", error);
+
         return res.status(500).json({
-            message : "Error creating task",
+            message: "Error creating task",
             error: error.message
-        })
+        });
     }
-}
+};
+
 
 const getMyTasks = async (req, res) => {
     try {
@@ -128,7 +175,9 @@ const getMyTasks = async (req, res) => {
             userId: req.user.userId
         };
 
+        // Search
         if (search) {
+
             query.$or = [
                 {
                     title: {
@@ -168,14 +217,14 @@ const getMyTasks = async (req, res) => {
         }
 
         // Category filter
-if (category) {
-    query.category = category;
-}
+        if (category) {
+            query.category = category;
+        }
 
-// Tags filter
-if (tags) {
-    query.tags = tags;
-}
+        // Tags filter
+        if (tags) {
+            query.tags = tags;
+        }
 
         // Sorting
         let sortOption = {
@@ -189,15 +238,25 @@ if (tags) {
             "status"
         ];
 
-        if (sortBy && allowedSortFields.includes(sortBy)) {
+        if (
+            sortBy &&
+            allowedSortFields.includes(sortBy)
+        ) {
             sortOption = {
                 [sortBy]: order === "asc" ? 1 : -1
             };
         }
 
         // Pagination
-        const pageNumber = Math.max(parseInt(page), 1);
-        const limitNumber = Math.max(parseInt(limit), 1);
+        const pageNumber = Math.max(
+            parseInt(page) || 1,
+            1
+        );
+
+        const limitNumber = Math.max(
+            parseInt(limit) || 5,
+            1
+        );
 
         const skip = (pageNumber - 1) * limitNumber;
 
@@ -210,67 +269,96 @@ if (tags) {
 
         const updatedTasks = tasks.map(task => ({
             ...task.toObject(),
+
             isOverdue:
                 task.dueDate &&
                 new Date(task.dueDate) < new Date() &&
                 task.status !== "Completed"
         }));
 
-        const totalPages = Math.ceil(totalTasks / limitNumber);
+        const totalPages = Math.ceil(
+            totalTasks / limitNumber
+        );
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Tasks fetched successfully",
+
             tasks: updatedTasks,
+
             pagination: {
                 currentPage: pageNumber,
                 totalPages: totalPages,
                 totalTasks: totalTasks,
                 limit: limitNumber,
-                hasNextPage: pageNumber < totalPages,
-                hasPreviousPage: pageNumber > 1
+
+                hasNextPage:
+                    pageNumber < totalPages,
+
+                hasPreviousPage:
+                    pageNumber > 1
             }
         });
 
     } catch (err) {
 
-        return res.status(500).json({
-            message: "Error fetching tasks"
-        });
+        console.error(
+            "Get My Tasks Error:",
+            err
+        );
 
+        return res.status(500).json({
+            message: "Error fetching tasks",
+            error: err.message
+        });
     }
 };
 
-const  getSingleTask = async (req,res)=>{
-    try{
+
+const getSingleTask = async (req, res) => {
+    try {
+
         const task = await Task.findOne({
             _id: req.params.id,
             userId: req.user.userId
         });
-        if(!task){
+
+        if (!task) {
             return res.status(404).json({
-                message : "Task not found"
-            })
+                message: "Task not found"
+            });
         }
+
         const updatedTask = {
             ...task.toObject(),
+
             isOverdue:
                 task.dueDate &&
                 new Date(task.dueDate) < new Date() &&
                 task.status !== "Completed"
         };
-        res.status(200).json({
-            message : "Task fetched successfully",
-            task: updatedTask
-        })
-    }catch(err){
-        return res.status(500).json({
-            message : "Error fetching task"
-        })
-    }
-}
 
-const updateTask = async (req,res)=>{
-    try{
+        return res.status(200).json({
+            message: "Task fetched successfully",
+            task: updatedTask
+        });
+
+    } catch (err) {
+
+        console.error(
+            "Get Single Task Error:",
+            err
+        );
+
+        return res.status(500).json({
+            message: "Error fetching task",
+            error: err.message
+        });
+    }
+};
+
+
+const updateTask = async (req, res) => {
+    try {
 
         const {
             title,
@@ -288,17 +376,19 @@ const updateTask = async (req,res)=>{
             });
         }
 
+        // Get old task before updating
         const oldTask = await Task.findOne({
             _id: req.params.id,
             userId: req.user.userId
         });
 
-        if(!oldTask){
+        if (!oldTask) {
             return res.status(404).json({
                 message: "Task not found"
             });
         }
 
+        // Update task
         const task = await Task.findOneAndUpdate(
             {
                 _id: req.params.id,
@@ -314,106 +404,163 @@ const updateTask = async (req,res)=>{
                 dueDate
             },
             {
-                returnDocument: "after", 
+                returnDocument: "after",
                 runValidators: true
             }
         );
 
-        if(!task){
+        if (!task) {
             return res.status(404).json({
                 message: "Task not found"
             });
         }
 
-        if (status === "Completed" && oldTask.status !== "Completed") {
+        // Send email only when task becomes Completed
+        if (
+            status === "Completed" &&
+            oldTask.status !== "Completed"
+        ) {
 
-            const user = await User.findById(req.user.userId);
+            try {
 
-            await sendEmail({
-                to: user.email,
-                subject: "Task Completed 🎉",
+                const user = await User.findById(
+                    req.user.userId
+                );
 
-                html: `
-                    <div style="
-                        font-family: Arial, sans-serif;
-                        max-width: 600px;
-                        margin: auto;
-                        padding: 30px;
-                        border: 1px solid #e2e8f0;
-                        border-radius: 10px;
-                    ">
+                if (user && user.email) {
 
-                        <h2 style="color: #16a34a;">
-                            Task Completed 🎉
-                        </h2>
+                    await sendEmail({
+                        to: user.email,
+                        subject: "Task Completed 🎉",
 
-                        <p>Hello ${user.name},</p>
+                        html: `
+                            <div style="
+                                font-family: Arial, sans-serif;
+                                max-width: 600px;
+                                margin: auto;
+                                padding: 30px;
+                                border: 1px solid #e2e8f0;
+                                border-radius: 10px;
+                            ">
 
-                        <p>
-                            Congratulations! You have successfully completed your task.
-                        </p>
+                                <h2 style="color: #16a34a;">
+                                    Task Completed 🎉
+                                </h2>
 
-                        <div style="
-                            background: #f0fdf4;
-                            padding: 20px;
-                            border-radius: 8px;
-                            margin: 20px 0;
-                        ">
+                                <p>
+                                    Hello ${user.name},
+                                </p>
 
-                            <h3>${task.title}</h3>
+                                <p>
+                                    Congratulations! You have successfully
+                                    completed your task.
+                                </p>
 
-                            <p>
-                                <strong>Description:</strong>
-                                ${task.description}
-                            </p>
+                                <div style="
+                                    background: #f0fdf4;
+                                    padding: 20px;
+                                    border-radius: 8px;
+                                    margin: 20px 0;
+                                ">
 
-                            <p>
-                                <strong>Status:</strong> Completed
-                            </p>
+                                    <h3>
+                                        ${task.title}
+                                    </h3>
 
-                            <p>
-                                <strong>Priority:</strong>
-                                ${task.priority}
-                            </p>
+                                    <p>
+                                        <strong>Description:</strong>
+                                        ${task.description}
+                                    </p>
 
-                            <p>
-                                <strong>Category:</strong>
-                                ${task.category}
-                            </p>
+                                    <p>
+                                        <strong>Status:</strong>
+                                        Completed
+                                    </p>
 
-                        </div>
+                                    <p>
+                                        <strong>Priority:</strong>
+                                        ${task.priority}
+                                    </p>
 
-                        <p>
-                            Keep up the great work!
-                        </p>
+                                    <p>
+                                        <strong>Category:</strong>
+                                        ${task.category}
+                                    </p>
 
-                        <p>
-                            Regards,<br>
-                            <strong>TaskFlow Team</strong>
-                        </p>
+                                    ${
+                                        task.dueDate
+                                            ? `
+                                                <p>
+                                                    <strong>Due Date:</strong>
+                                                    ${new Date(
+                                                        task.dueDate
+                                                    ).toLocaleDateString()}
+                                                </p>
+                                            `
+                                            : ""
+                                    }
 
-                    </div>
-                `
-            });
+                                </div>
+
+                                <p>
+                                    Keep up the great work!
+                                </p>
+
+                                <p>
+                                    Regards,<br>
+                                    <strong>TaskFlow Team</strong>
+                                </p>
+
+                            </div>
+                        `
+                    });
+
+                    console.log(
+                        "Task completion email sent successfully to:",
+                        user.email
+                    );
+
+                } else {
+
+                    console.log(
+                        "Task completed, but user email was not found."
+                    );
+
+                }
+
+            } catch (emailError) {
+
+                console.error(
+                    "Task completion email failed:",
+                    emailError
+                );
+
+            }
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Task updated successfully",
             task
         });
 
-    }catch(err){
+    } catch (err) {
+
+        console.error(
+            "Update Task Error:",
+            err
+        );
 
         return res.status(500).json({
             message: "Error updating task",
             error: err.message
         });
-
     }
-}
+};
+
 
 const deleteTask = async (req, res) => {
     try {
+
         const task = await Task.findOneAndDelete({
             _id: req.params.id,
             userId: req.user.userId
@@ -425,26 +572,51 @@ const deleteTask = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Task deleted successfully"
         });
 
     } catch (err) {
-        res.status(500).json({
+
+        console.error(
+            "Delete Task Error:",
+            err
+        );
+
+        return res.status(500).json({
             message: "Failed to delete task",
             error: err.message
         });
     }
 };
 
+
 const getDashboardStats = async (req, res) => {
-    try{
-        const TotalTasks = await Task.countDocuments({ userId: req.user.userId });
-        const CompletedTasks = await Task.countDocuments({ userId: req.user.userId, status: 'Completed' });
-        const PendingTasks = await Task.countDocuments({ userId: req.user.userId, status: 'Pending' });
-        const InProgressTasks = await Task.countDocuments({ userId: req.user.userId, status: 'In Progress' });
-        res.status(200).json({
+    try {
+
+        const TotalTasks = await Task.countDocuments({
+            userId: req.user.userId
+        });
+
+        const CompletedTasks = await Task.countDocuments({
+            userId: req.user.userId,
+            status: "Completed"
+        });
+
+        const PendingTasks = await Task.countDocuments({
+            userId: req.user.userId,
+            status: "Pending"
+        });
+
+        const InProgressTasks = await Task.countDocuments({
+            userId: req.user.userId,
+            status: "In Progress"
+        });
+
+        return res.status(200).json({
+
             message: "Dashboard stats fetched successfully",
+
             stats: {
                 TotalTasks,
                 CompletedTasks,
@@ -452,13 +624,21 @@ const getDashboardStats = async (req, res) => {
                 InProgressTasks
             }
         });
+
     } catch (err) {
-        res.status(500).json({
+
+        console.error(
+            "Dashboard Stats Error:",
+            err
+        );
+
+        return res.status(500).json({
             message: "Error fetching dashboard stats",
             error: err.message
         });
     }
-}
+};
+
 
 module.exports = {
     createTask,

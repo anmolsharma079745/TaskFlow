@@ -47,8 +47,8 @@ const Header = () => {
 
                         <Link to="/" className="header-logo-link">
 
-                            <div className="logo-icon">
-                                <i className="ri-check-double-line"></i>
+                            <div className="logo-icon"> 
+                                <img src="/Task%20Flow%20symbol.png" alt="TaskFlow Logo" /> 
                             </div>
 
                             <span>TaskFlow</span>
