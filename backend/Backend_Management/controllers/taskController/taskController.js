@@ -12,27 +12,25 @@ const createTask = async (req, res) => {
         const {
             title,
             description,
+            status,
             priority,
             category,
             tags,
             dueDate
         } = req.body;
 
-        if (!title || !description) {
-            return res.status(400).json({
-                message: "Title and description are required"
-            });
-        }
-
+        // Due date validation
         if (dueDate && new Date(dueDate) <= new Date()) {
             return res.status(400).json({
                 message: "Due date and time must be in the future"
             });
         }
 
-        const task = new Task({
+        // Create task
+        const task = await Task.create({
             title,
             description,
+            status: status || "Pending",
             priority,
             category,
             tags,
@@ -40,89 +38,78 @@ const createTask = async (req, res) => {
             userId: req.user.userId
         });
 
-        await task.save();
-
-        // ==============================
-        // SEND TASK CREATION EMAIL
-        // ==============================
-
+        // Send email separately
         try {
             const user = await User.findById(req.user.userId);
 
             if (user && user.email) {
-                await sendEmail({
+                sendEmail({
                     to: user.email,
                     subject: "Task Created Successfully",
                     html: `
-                        <div style="
-                            font-family: Arial, sans-serif;
-                            max-width: 600px;
-                            margin: auto;
-                            padding: 30px;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 10px;
-                        ">
-
-                            <h2 style="color: #2563eb;">
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; background: #f8fafc; border-radius: 12px;">
+                            
+                            <h2 style="color: #2563eb; margin-bottom: 10px;">
                                 Task Created Successfully
                             </h2>
 
-                            <p>Hello ${user.name},</p>
+                            <p style="font-size: 16px; color: #334155;">
+                                Hello ${user.name || "User"},
+                            </p>
 
-                            <p>
+                            <p style="font-size: 15px; color: #475569;">
                                 Your task has been created successfully in TaskFlow.
                             </p>
 
-                            <div style="
-                                background: #f8fafc;
-                                padding: 20px;
-                                border-radius: 8px;
-                                margin: 20px 0;
-                            ">
-
-                                <h3>${task.title}</h3>
-
+                            <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                                
                                 <p>
-                                    <strong>Description:</strong>
-                                    ${task.description}
+                                    <strong>Task:</strong> ${task.title}
                                 </p>
 
                                 <p>
-                                    <strong>Priority:</strong>
-                                    ${task.priority}
+                                    <strong>Status:</strong> ${task.status}
                                 </p>
 
                                 <p>
-                                    <strong>Status:</strong>
-                                    ${task.status}
+                                    <strong>Priority:</strong> ${task.priority || "Not specified"}
+                                </p>
+
+                                <p>
+                                    <strong>Category:</strong> ${task.category || "Not specified"}
                                 </p>
 
                                 ${
                                     task.dueDate
-                                        ? `
-                                            <p>
-                                                <strong>Due Date:</strong>
-                                                ${new Date(task.dueDate).toLocaleDateString()}
-                                            </p>
-                                        `
+                                        ? `<p>
+                                            <strong>Due Date:</strong> 
+                                            ${new Date(task.dueDate).toLocaleString()}
+                                           </p>`
                                         : ""
                                 }
 
                             </div>
 
-                            <p>
-                                Regards,<br>
-                                <strong>TaskFlow Team</strong>
+                            <p style="margin-top: 25px; color: #64748b;">
+                                Keep up the great work with TaskFlow!
                             </p>
 
                         </div>
                     `
+                })
+                .then(() => {
+                    console.log(
+                        "Task creation email sent successfully to:",
+                        user.email
+                    );
+                })
+                .catch((emailError) => {
+                    console.error(
+                        "Task creation email failed:",
+                        emailError
+                    );
                 });
 
-                console.log(
-                    "Task creation email sent successfully to:",
-                    user.email
-                );
             } else {
                 console.log(
                     "Task created, but user email was not found."
@@ -131,25 +118,26 @@ const createTask = async (req, res) => {
 
         } catch (emailError) {
             console.error(
-                "Task creation email failed:",
+                "Error preparing task creation email:",
                 emailError
             );
         }
 
+        // Return response immediately
         return res.status(201).json({
             message: "Task created successfully",
             task
         });
 
-    } catch (error) {
+    } catch (err) {
         console.error(
             "Create Task Error:",
-            error
+            err
         );
 
         return res.status(500).json({
             message: "Error creating task",
-            error: error.message
+            error: err.message
         });
     }
 };
@@ -364,6 +352,7 @@ const getSingleTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
     try {
+
         const {
             title,
             description,
@@ -374,6 +363,7 @@ const updateTask = async (req, res) => {
             dueDate
         } = req.body;
 
+        // Validate due date
         if (dueDate && new Date(dueDate) <= new Date()) {
             return res.status(400).json({
                 message: "Due date and time must be in the future"
@@ -419,23 +409,27 @@ const updateTask = async (req, res) => {
             });
         }
 
-        // ==============================
-        // SEND COMPLETION EMAIL
-        // ==============================
+        // =====================================
+        // SEND EMAIL WHEN TASK IS COMPLETED
+        // =====================================
 
         if (
             status === "Completed" &&
             oldTask.status !== "Completed"
         ) {
+
             try {
+
                 const user = await User.findById(
                     req.user.userId
                 );
 
                 if (user && user.email) {
-                    await sendEmail({
+
+                    sendEmail({
                         to: user.email,
                         subject: "Task Completed 🎉",
+
                         html: `
                             <div style="
                                 font-family: Arial, sans-serif;
@@ -516,25 +510,45 @@ const updateTask = async (req, res) => {
 
                             </div>
                         `
+                    })
+                    .then(() => {
+
+                        console.log(
+                            "Task completion email sent successfully to:",
+                            user.email
+                        );
+
+                    })
+                    .catch((emailError) => {
+
+                        console.error(
+                            "Task completion email failed:",
+                            emailError
+                        );
+
                     });
 
-                    console.log(
-                        "Task completion email sent successfully to:",
-                        user.email
-                    );
                 } else {
+
                     console.log(
                         "Task completed, but user email was not found."
                     );
+
                 }
 
             } catch (emailError) {
+
                 console.error(
-                    "Task completion email failed:",
+                    "Error preparing completion email:",
                     emailError
                 );
+
             }
         }
+
+        // =====================================
+        // RETURN UPDATED TASK IMMEDIATELY
+        // =====================================
 
         return res.status(200).json({
             message: "Task updated successfully",
@@ -542,6 +556,7 @@ const updateTask = async (req, res) => {
         });
 
     } catch (err) {
+
         console.error(
             "Update Task Error:",
             err
